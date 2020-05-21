@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendetta Wbot Tools[Bot Settings]</title>
+    <style>
+        body {
+            min-height: 100%;
+        }
+
+        .footer {
+
+            position: fixed;
+
+            left: 0;
+
+            bottom: 0;
+
+            width: 100%;
+
+            padding: 15px 0;
+
+            text-align: center;
+
+            color: white;
+
+            background: black;
+
+        }
+    </style>
+</head>
+
+<body>
+    <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+    <script type="text/javascript">
+        const Discord = require('discord.js')
+        const client = new Discord.Client();
+        function change() {
+            const a = document.getElementById("active");
+            const c = document.getElementById("playing");
+            console.log(a.options[a.selectedIndex].value)
+            let link = ""
+            if (!document.getElementById('stream').value) {
+                link = "https://www.twitch.tv/vendettadelsangue"
+            } else {
+                link = document.getElementById('stream').value
+            }
+            localStorage.setItem("link", link);
+            localStorage.setItem("game", document.getElementById('text').value);
+            localStorage.setItem("status", a.options[a.selectedIndex].value);
+            localStorage.setItem("type", c.options[c.selectedIndex].value);
+        }
+        function gost() {
+            console.log('1')
+            require('electron').shell.openExternal(localStorage.link)
+        }
+
+        const bang = setInterval(a => {
+            document.getElementById('prefix').readonly = false;
+            document.getElementById('name').readonly = false;
+            document.getElementById('avatar').readonly = false;
+            document.getElementById('bprefix').innerText = ` | Prefix : ${localStorage.prefix}`
+            document.getElementById('bname').innerText = localStorage.bname
+            document.getElementById('bavatar').src = localStorage.bavatar
+            let st = ""
+            if (localStorage.status) {
+                if (localStorage.status == "online") {
+                    st += `Status : <a class="ui green empty circular label"></a> `
+                } else if (localStorage.status == "available") {
+                    st += `Status : <a class="ui green empty circular label"></a> `
+                } else if (localStorage.status == "idle") {
+                    st += `Status : <a class="ui yellow empty circular label"></a> `
+                } else if (localStorage.status == "dnd") {
+                    st += `Status : <a class="ui red empty circular label"></a> `
+                } else if (localStorage.status == "invisible") {
+                    st += `Status : <a class="ui grey empty circular label"></a> `
+                }
+            }
+            if (localStorage.game) {
+                st += `| Game : ${localStorage.game} `
+            }
+            if (localStorage.type) {
+                st += `| ${localStorage.type} `
+            }
+            if (localStorage.link) {
+
+                st += `| <button class="ui button" onClick="gost()"></i>Go to Stream</button>`
+            }
+            document.getElementById('bactivity').innerHTML = st
+        }, 4000)
+
+        setTimeout(a => {
+            document.getElementById('prefix').readonly = false;
+            document.getElementById('name').readonly = false;
+            document.getElementById('avatar').readonly = false;
+            document.getElementById('bprefix').innerText = ` | Prefix : ${localStorage.prefix}`
+            document.getElementById('bname').innerText = localStorage.bname
+            document.getElementById('bavatar').src = localStorage.bavatar
+            let st = ""
+            if (localStorage.status) {
+                if (localStorage.status == "online") {
+                    st += `Status : <a class="ui green empty circular label"></a> `
+                } else if (localStorage.status == "available") {
+                    st += `Status : <a class="ui green empty circular label"></a> `
+                } else if (localStorage.status == "idle") {
+                    st += `Status : <a class="ui yellow empty circular label"></a> `
+                } else if (localStorage.status == "dnd") {
+                    st += `Status : <a class="ui red empty circular label"></a> `
+                } else if (localStorage.status == "invisible") {
+                    st += `Status : <a class="ui grey empty circular label"></a> `
+                }
+            }
+            if (localStorage.game) {
+                st += `| Game : ${localStorage.game} `
+            }
+            if (localStorage.type) {
+                st += `| ${localStorage.type} `
+            }
+            if (localStorage.link) {
+
+                st += `| <button class="ui button" onClick="gost()"></i>Go to Stream</button>`
+            }
+            document.getElementById('bactivity').innerHTML = st
+        }, 1)
+
+        function bprefix() {
+            if (!document.getElementById("prefix").value) {
+                alert('Must fill the text box')
+                return;
+            }
+            try {
+                localStorage.setItem("prefix", document.getElementById("prefix").value);
+                alert('Successfully changed.')
+            } catch (e) {
+                alert(e)
+            }
+        }
+        function bname() {
+            if (!document.getElementById("name").value) {
+                alert('Must fill the text box')
+                return;
+            }
+            client.on('ready', async () => {
+                try {
+                    let n = 0
+                    await client.user.setUsername(document.getElementById("name").value).catch(error => {
+                        alert(error)
+                        client.destroy()
+                        n = 1
+                    });
+                    if (n == 0) {
+                        alert('Successfully changed.')
+                        await localStorage.setItem('bname', client.user.tag)
+                        client.destroy()
+                    }
+                } catch (error) {
+                    alert(error).then(a => {
+                        client.destroy()
+                    })
+                }
+            })
+            client.login(localStorage.token).catch(error => alert(error));
+        }
+        function bavatar() {
+            if (!document.getElementById("avatar").value) {
+                alert('Must fill the text box')
+                return;
+            }
+            client.on('ready', async () => {
+                try {
+                    let n = 0
+                    await client.user.setUsername(document.getElementById("avatar").value).catch(error => {
+                        alert(error)
+                        client.destroy()
+                        n = 1
+                    });
+                    if (n == 0) {
+                        alert('Successfully changed.')
+                        await localStorage.setItem('bavatar', client.user.avatarURL())
+                        client.destroy()
+                    }
+                } catch (error) {
+                    alert(error).then(a => {
+                        client.destroy()
+                    })
+                }
+            })
+            client.login(localStorage.token).catch(error => alert(error));
+        }
+    </script>
+
+    <section style="position:absolute;right:0;top:0;z-index:10000;">
+        <img id="bavatar" class="ui avatar image" src="image">
+        <span id="bname">Username</span>
+        <span id="bprefix">prefix</span>
+        <br>
+        <span id="bactivity">stat</span>
+    </section>
+    <section style="text-align: center;">
+        <br><br><br>
+        <h1>Bot Settings</h1>
+        <br>
+        <br>
+        <section style="text-align: center;">
+            <h3>
+                Set prefix
+            </h3>
+            <div class="ui input">
+                <input id="prefix" type="text" placeholder="prefix">
+                <button class="ui right labeled icon button" onClick="bprefix()">
+                    <i class="right arrow icon"></i>
+                    Change prefix
+                </button>
+            </div>
+        </section>
+        <br>
+        <section style="text-align: center;">
+            <h3>
+                Set Name
+            </h3>
+            <div class="ui input">
+                <input id="name" type="text" maxlength="32" placeholder="name(Max 32)">
+                <button class="ui right labeled icon button" onClick="bname()">
+                    <i class="right arrow icon"></i>
+                    Change Name
+                </button>
+            </div>
+        </section>
+        <br>
+        <section style="text-align: center;">
+            <h3>
+                Set Avatar
+            </h3>
+            <div class="ui input">
+                <input id="avatar" type="text" placeholder="avatar">
+                <button class="ui right labeled icon button" onClick="bavatar()">
+                    <i class="right arrow icon"></i>
+                    Change Avatar
+                </button>
+            </div>
+        </section>
+        <h3>
+            Set Activity
+        </h3>
+        <div class="ui input">
+            <input id="text" type="text" placeholder="Playing">
+            <input id="stream" type="text" placeholder="Twitch Link">
+            <select id="active">
+                <option value="available" selected="selected">Online</option>
+                <option value="idle">Idle</option>
+                <option value="dnd">DO NOT DISTRUB</option>
+                <option value="invisible">Offline</option>
+            </select>
+            <select id="playing">
+                <option value="PLAYING" selected="selected">Playing</option>
+                <option value="STREAMING">Streaming</option>
+                <option value="LISTENING">Listening</option>
+                <option value="WATCHING">Watching</option>
+            </select>
+            <button class="ui right labeled icon button" onClick="change()">
+                <i class="right arrow icon"></i>
+                Change Activity
+            </button>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+    </section>
+    <div class="footer">
+        <p>Made by : 천마 [Vendetta]#4120</p>
+    </div>
+</body>
+
+</html>

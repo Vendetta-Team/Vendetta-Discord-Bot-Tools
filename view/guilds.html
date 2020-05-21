@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendetta Wbot Tools[Guilds]</title>
+    <style>
+        body {
+            min-height: 100%;
+        }
+
+        .footer {
+
+            position: fixed;
+
+            left: 0;
+
+            bottom: 0;
+
+            width: 100%;
+
+            padding: 15px 0;
+
+            text-align: center;
+
+            color: white;
+
+            background: black;
+
+        }
+    </style>
+</head>
+
+<body>
+    <section id="guild">
+        <h1>
+            loading...
+        </h1>
+    </section>
+
+    <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+    <script type="text/javascript">
+        const Discord = require('discord.js')
+        const client = new Discord.Client();
+        client.on('ready', async () => {
+            let guild = ""
+            await client.guilds.cache.forEach(g => {
+                let ico = ""
+                if (g.iconURL()) {
+                    ico = g.iconURL()
+                } else {
+                    ico = "https://external-preview.redd.it/9HZBYcvaOEnh4tOp5EqgcCr_vKH7cjFJwkvw-45Dfjs.png?auto=webp&s=ade9b43592942905a45d04dbc5065badb5aa3483"
+                }
+                guild += (`<section><div class="ui divider"></div><img class="ui middle aligned tiny image" src="${ico}"><span>${g.name}</span><div class="ui divider"></div></section>`)
+            })
+            document.getElementById('guild').innerHTML = guild
+            client.destroy()
+        })
+        client.login(localStorage.token)
+    </script>
+    <br>
+    <br>
+    <div class="footer">
+        <p>Made by : 천마 [Vendetta]#4120</p>
+    </div>
+</body>
+
+</html>

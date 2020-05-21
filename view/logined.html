@@ -1,0 +1,198 @@
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>
+        Trying to login..
+    </title>
+</head>
+
+<body>
+    <style>
+        body {
+            min-height: 100%;
+        }
+
+        .footer {
+
+            position: absolute;
+
+            left: 0;
+
+            bottom: 0;
+
+            width: 100%;
+
+            padding: 15px 0;
+
+            text-align: center;
+
+            color: white;
+
+            background: black;
+
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+    <script src="../semantic/dist/semantic.min.js"></script>
+    <script type="text/javascript" src="../discord.min.js"></script>
+    <script type="text/javascript">
+        const { ipcRenderer, BrowserWindow } = require('electron')
+        var SelfReloadJSON = require('self-reload-json');
+        var prefix = "!"
+        const client = new Discord.Client();
+
+        client.on('ready', () => {
+            if (!client.user.bot) {
+                alert("Login failed..", "Self-bot is not allowed\nPlease Check Discord Tos")
+                location.href = 'index.html'
+                require('electron').shell.openExternal(`https://support.discord.com/hc/en-us/articles/115002192352-Automated-user-accounts-self-bots-`)
+            }
+            document.title = "Bot is Running!"
+            document.getElementById('title').innerHTML = "Bot is running"
+            setInterval(() => {
+                client.user.setActivity(localStorage.game, { type: localStorage.type, url: localStorage.link }).then(b => {
+                    client.user.setStatus(localStorage.status)
+                })
+                document.getElementById('ping').innerText = `${client.ws.ping}`
+                document.getElementById('server').innerText = `${client.guilds.cache.size}`
+                document.getElementById('user').innerText = `${client.users.cache.size}`
+            }, 4000)
+            setTimeout(() => {
+                localStorage.setItem("prefix", "!")
+                localStorage.setItem("bname", client.user.tag)
+                localStorage.setItem("bavatar", client.user.displayAvatarURL())
+                if (!client.user.presence.activities[0]) {
+                    localStorage.setItem("game", '');
+                    localStorage.setItem("type", '');
+                    localStorage.setItem("link", '');
+                } else {
+                    localStorage.setItem("game", client.user.presence.activities[0].name);
+                    localStorage.setItem("type", client.user.presence.activities[0].type);
+                    localStorage.setItem("link", client.user.presence.activities[0].url);
+                }
+                localStorage.setItem("status", client.user.presence.status);
+                document.getElementById('t1').innerHTML = '<i class="download icon"></i>PING'
+                document.getElementById('t2').innerHTML = '<i class="hdd outline icon"></i>SERVER SIZE'
+                document.getElementById('t3').innerHTML = '<i class="user outline icon"></i>USER SIZE'
+            }, 1);
+        })
+        client.on('message', message => {
+            if (message.author.bot) return;
+            if (message.content.indexOf(localStorage.prefix) !== 0) return;
+            const args = message.content.slice(localStorage.prefix.length).trim().split(/ +/g);
+            const command = args.shift().toLocaleLowerCase();
+            const commandlist = JSON.parse(localStorage.getItem('commands'))
+            console.log(1)
+            if (!commandlist) {
+                console.log(2)
+            } else if (!commandlist == {}) {
+                console.log(3)
+            } else {
+                console.log(4)
+                if (commandlist[command]) {
+                    try {
+                        console.log(5)
+                        message.reply(commandlist[command])
+                    } catch (e) {
+                        message.reply(`Error : ${e}`)
+                    }
+                }
+            }
+        });
+        client.login(localStorage.token).catch(e => {
+            alert("Login failed..", "Token missing or invalid.")
+            location.href = 'index.html'
+            console.log(e);
+        })
+        function commands() {
+            ipcRenderer.send('CommandsForm', () => {
+                console.log("Event sent.");
+            });
+        }
+        function events() {
+            ipcRenderer.send('EventsForm', () => {
+                console.log("Event sent.");
+            });
+        }
+        function botinfo() {
+            ipcRenderer.send('BotinfoForm', () => {
+                console.log("Event sent.");
+            });
+        }
+        function invite() {
+            require('electron').shell.openExternal(`https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot`)
+        }
+        function guilds() {
+            ipcRenderer.send('GuildsForm', () => {
+                console.log("Event sent.");
+            });
+        }
+        function database() {
+            ipcRenderer.send('DatabaseForm', () => {
+                console.log("Event sent.");
+            });
+        }
+    </script>
+    <section style="text-align: center;">
+        <h1 id="title">
+            Trying to login...
+        </h1>
+    </section>
+    <br>
+    <br>
+    <section style="text-align: center;">
+
+        <div class="ui grey statistic">
+            <div id="ping" class="value">
+
+            </div>
+            <div id="t1" class="label">
+
+            </div>
+        </div>
+
+        <div class="ui grey statistic">
+            <div id="server" class="value">
+
+            </div>
+            <div id="t2" class="label">
+
+            </div>
+        </div>
+
+        <div class="ui grey statistic">
+            <div id="user" class="value">
+
+            </div>
+            <div id="t3" class="label">
+
+            </div>
+        </div>
+
+    </section>
+    <br><br><br><br><br><br><br><br>
+    <section style="text-align: center;">
+        <div class="ui buttons">
+            <button class="ui button" onclick="commands()">Commands</button>
+            <button class="ui button" onclick="events()">Events</button>
+            <button class="ui button" onclick="botinfo()">Bot Settings</button>
+            <button class="ui button" onclick="invite()">Invite Link</button>
+            <button class="ui button" onclick="guilds()">Guilds Info</button>
+            <button class="ui button" onclick="database()">DataBase Info</button>
+        </div>
+    </section>
+    <div class="footer">
+        <section style="text-align: center;">
+            <button class="ui right labeled icon button" onClick="location.href = 'index.html'">
+                <i class="right arrow icon"></i>
+                Logout
+            </button>
+        </section>
+        <p>Made by : 천마 [Vendetta]#4120</p>
+    </div>
+</body>
+
+</html>

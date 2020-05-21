@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendetta Wbot Tools[Commands]</title>
+</head>
+<style>
+    body {
+        min-height: 100%;
+    }
+
+    .footer {
+
+        position: fixed;
+
+        left: 0;
+
+        bottom: 0;
+
+        width: 100%;
+
+        padding: 15px 0;
+
+        text-align: center;
+
+        color: white;
+
+        background: black;
+
+    }
+</style>
+
+<body>
+    <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+    <script src="../semantic/dist/semantic.min.js"></script>
+    <section>
+        <div class="ui input">
+            <input id="command" type="text" placeholder="Command">
+            <input id="reply" type="text" placeholder="Reply">
+            <button class="ui right labeled icon button" onClick="commandd()">
+                <i class="right arrow icon"></i>
+                Add command
+            </button>
+        </div>
+    </section>
+    <section id="bbcommands">
+        <h1>
+            loading...
+        </h1>
+    </section>
+    <br><br>
+    <div class="footer">
+        <p>Made by : 천마 [Vendetta]#4120</p>
+    </div>
+</body>
+<script type="text/javascript">
+    let cmds = ""
+    setTimeout(async () => {
+        try {
+            const commandlist = await JSON.parse(localStorage.getItem('commands'))
+            if (!commandlist) {
+                document.getElementById('bbcommands').innerHTML = ("<h1>명령어가 없습니다.</h1>")
+            } else {
+                for (const property in commandlist) {
+                    cmds += (`<section id=${property}><div class="ui divider"></div><h1 class="ui header">${property}<div class="sub header">${commandlist[property]}</div></h1><button class='ui right labeled icon button' onClick="const dele = JSON.parse(localStorage.getItem('commands'));delete dele.${property}; localStorage.setItem('commands',JSON.stringify(dele));document.getElementById('${property}').remove();"><i class='right arrow icon'></i>Delete Command</button><div class="ui divider"></div><br></section>`)
+                }
+                document.getElementById('bbcommands').innerHTML = cmds
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }, 1);
+    async function commandd() {
+        if (!document.getElementById('command').value) {
+            alert('You must fill command text box');
+            document.getElementById('command').disabled = false;
+            document.getElementById('reply').disabled = false;
+            document.getElementById('command').readonly = false;
+            document.getElementById('reply').readonly = false;
+            document.getElementById('reply').disabled;
+            document.getElementById('command').disabled;
+            return
+        }
+        if (!document.getElementById('reply').value) {
+            alert('You must fill reply text box');
+            document.getElementById('command').disabled = false;
+            document.getElementById('reply').disabled = false;
+            document.getElementById('command').readonly = false;
+            document.getElementById('reply').readonly = false;
+            document.getElementById('reply').disabled;
+            document.getElementById('command').disabled;
+            return
+        }
+        let command = {}
+        if (localStorage.getItem('commands') == "undefined" || !localStorage.getItem('commands')) {
+            console.log(1)
+            command[document.getElementById('command').value] = document.getElementById('reply').value
+            localStorage.setItem('commands', JSON.stringify(command));
+            document.getElementById('bbcommands').innerHTML = `<section id=${document.getElementById('command').value}><div class="ui divider"></div><h1 class="ui header">${document.getElementById('command').value}<div class="sub header">${document.getElementById('reply').value}</div></h1><button class='ui right labeled icon button' onClick="const dele = JSON.parse(localStorage.getItem('commands'));delete dele.${document.getElementById('command').value}; localStorage.setItem('commands',JSON.stringify(dele));document.getElementById('${document.getElementById('command').value}').remove();"><i class='right arrow icon'></i>Delete Command</button><div class="ui divider"></div><br></section>`
+            document.getElementById('command').disabled = false;
+            document.getElementById('reply').disabled = false;
+            document.getElementById('command').readonly = false;
+            document.getElementById('reply').readonly = false;
+            document.getElementById('reply').disabled;
+            document.getElementById('command').disabled;
+        } else {
+            console.log(2)
+            commands = JSON.parse(localStorage.getItem('commands'))
+            if (commands[document.getElementById('command').value]) {
+                await alert('The command is already defined.');
+                document.getElementById('command').disabled = false;
+                document.getElementById('reply').disabled = false;
+                document.getElementById('command').readonly = false;
+                document.getElementById('reply').readonly = false;
+                document.getElementById('reply').disabled;
+                document.getElementById('command').disabled;
+                return
+            } else {
+                command = JSON.parse(localStorage.getItem('commands'))
+                command[document.getElementById('command').value] = document.getElementById('reply').value
+                console.log(document.getElementById('command').value)
+                console.log(command)
+                localStorage.setItem('commands', JSON.stringify(command));
+                document.getElementById('bbcommands').innerHTML += `<section id=${document.getElementById('command').value}><div class="ui divider"></div><h1 class="ui header">${document.getElementById('command').value}<div class="sub header">${document.getElementById('reply').value}</div></h1><button class='ui right labeled icon button' onClick="const dele = JSON.parse(localStorage.getItem('commands'));delete dele.${document.getElementById('command').value}; localStorage.setItem('commands',JSON.stringify(dele));document.getElementById('${document.getElementById('command').value}').remove();"><i class='right arrow icon'></i>Delete Command</button><div class="ui divider"></div><br></section>`
+                document.getElementById('command').disabled = false;
+                document.getElementById('reply').disabled = false;
+                document.getElementById('command').readonly = false;
+                document.getElementById('reply').readonly = false;
+                document.getElementById('reply').disabled;
+                document.getElementById('command').disabled;
+            }
+
+        }
+    }
+</script>
+
+</html>

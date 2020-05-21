@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendetta Wbot Tools</title>
+</head>
+<style>
+  body {
+    min-height: 100%;
+  }
+
+  .footer {
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: 0;
+
+    width: 100%;
+
+    padding: 15px 0;
+
+    text-align: center;
+
+    color: white;
+
+    background: black;
+
+  }
+</style>
+
+<body>
+  <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+  <script src="../semantic/dist/semantic.min.js"></script>
+  <script type="text/javascript">
+    function login() {
+      localStorage.setItem("token", document.getElementById("token").value);
+      location.href = 'logined.html'
+      // 'NTk4NTE0ODU1MzA1MjgxNTY4.XqUMhw.yLsvA_YTDrICp6lRZobwKCzbZS0'
+    }
+    const path = require('path');
+    const os = require('os');
+    // localStorage.setItem("lang", "en");
+
+    // function chageLangSelect() {
+    //   var langSelect = document.getElementById("id-lang");
+
+    //   localStorage.setItem("lang", langSelect.options[langSelect.selectedIndex].value);
+    // }
+
+  </script>
+
+  <!-- 
+  <button style="position:fixed;right:0;top:0;z-index:10000;" class="circular ui icon button">
+    <i class="icon settings"></i>
+  </button> -->
+  <!-- <select style="position:fixed;right:0;top:0;z-index:10000;" id="id-lang" name="lang" onchange="chageLangSelect()" class="ui search dropdown">
+    <option value="en">English</option>
+    <option value="kr">Korean</option>
+  </select> -->
+  <section style="text-align: center;">
+    <h1>Version Beta</h1>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="ui input">
+      <input id="token" type="text" placeholder="Token">
+      <button class="ui right labeled icon button" onClick="login()">
+        <i class="right arrow icon"></i>
+        Login
+      </button>
+    </div>
+    <div class="ui small basic icon buttons">
+      <button class="ui button" onclick="save()"><i class="save icon"></i></button>
+      <button class="ui button" onclick="load()"><i class="download icon"></i></button>
+    </div>
+  </section>
+  <script type="text/javascript">
+    localStorage.clear();
+    var remote = require('electron').remote;
+    var fs = require('fs')
+    var dialog = remote.dialog;
+    async function save() {
+      data = { "token": document.getElementById("token").value }
+      var savePath = await dialog.showSaveDialog({
+        title: "Save token",
+        defaultPath: "token",
+        buttonLabel: "save",
+
+        filters: [
+          { name: 'json', extensions: ['json',] },
+          { name: 'All Files', extensions: ['*'] }
+        ]
+      })
+
+      if (savePath.canceled === true) {
+        console.log("No file selected");
+        return;
+      }
+      if (savePath.filePath.length === 0) {
+        console.log("No file selected");
+        return;
+      }
+      fs.writeFile(savePath.filePath, JSON.stringify(data), function (err) {
+        if (err) return alert('An error occurred while saving\n\n' + err)
+        alert("Successfully saved.");
+      });
+    }
+    async function load() {
+      var fileNames = await dialog.showOpenDialog({ title: "Load token" })
+      console.log(fileNames)
+      if (fileNames.filePaths === undefined) {
+        console.log("No file selected");
+        return;
+      }
+      if (fileNames.canceled === true) {
+        console.log("No file selected");
+        return;
+      }
+
+      fs.readFile(fileNames.filePaths[0], 'utf-8', (err, data) => {
+        if (err) {
+          alert("An error occurred while loading the file. :" + err.message);
+          return;
+        }
+        a = JSON.parse(data)
+        console.log(a)
+        alert("Successfully loaded.");
+        document.getElementById("token").value = a.token;
+        document.getElementById('token').readonly = false;
+        document.getElementById('token').disabled = false;
+        document.getElementById('token').disabled;
+      });
+    }
+
+  </script>
+  <div class="footer">
+    <p>Made by : 천마 [Vendetta]#4120</p>
+  </div>
+</body>
+
+</html>
