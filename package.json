@@ -1,7 +1,7 @@
 {
   "name": "vendetta-bot-tools",
   "version": "0.1.0",
-  "description": "tutorial for electron",
+  "description": "Discord Bot tools by Vendetta",
   "main": "index.js",
   "scripts": {
     "start": "electron index.js"
