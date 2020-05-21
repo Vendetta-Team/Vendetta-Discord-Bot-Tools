@@ -171,7 +171,7 @@
             client.on('ready', async () => {
                 try {
                     let n = 0
-                    await client.user.setUsername(document.getElementById("avatar").value).catch(error => {
+                    await client.user.setAvatar(document.getElementById("avatar").value).catch(error => {
                         alert(error)
                         client.destroy()
                         n = 1
