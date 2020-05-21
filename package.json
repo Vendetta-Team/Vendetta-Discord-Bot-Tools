@@ -10,7 +10,7 @@
     "graceful-fs": "4.2.2"
   },
   "author": "천마",
-  "license": "ISC",
+  "license": "GPL 3.0",
   "dependencies": {
     "@discordjs/opus": "0.2.1",
     "discord-rich-presence": "0.0.8",
