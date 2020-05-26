@@ -127,67 +127,67 @@
 
         function bprefix() {
             if (!document.getElementById("prefix").value) {
-                alert('Must fill the text box')
+                dialog.showErrorBox('error', 'Must fill the text box')
                 return;
             }
             try {
                 localStorage.setItem("prefix", document.getElementById("prefix").value);
-                alert('Successfully changed.')
+                dialog.showErrorBox('error', 'Successfully changed.')
             } catch (e) {
-                alert(e)
+                dialog.showErrorBox('error', e)
             }
         }
         function bname() {
             if (!document.getElementById("name").value) {
-                alert('Must fill the text box')
+                dialog.showErrorBox('error', 'Must fill the text box')
                 return;
             }
             client.on('ready', async () => {
                 try {
                     let n = 0
                     await client.user.setUsername(document.getElementById("name").value).catch(error => {
-                        alert(error)
+                        dialog.showErrorBox('error', error)
                         client.destroy()
                         n = 1
                     });
                     if (n == 0) {
-                        alert('Successfully changed.')
+                        dialog.showErrorBox('error', 'Successfully changed.')
                         await localStorage.setItem('bname', client.user.tag)
                         client.destroy()
                     }
                 } catch (error) {
-                    alert(error).then(a => {
+                    dialog.showErrorBox('error', error).then(a => {
                         client.destroy()
                     })
                 }
             })
-            client.login(localStorage.token).catch(error => alert(error));
+            client.login(localStorage.token).catch(error => dialog.showErrorBox('error', error));
         }
         function bavatar() {
             if (!document.getElementById("avatar").value) {
-                alert('Must fill the text box')
+                dialog.showErrorBox('error', 'Must fill the text box')
                 return;
             }
             client.on('ready', async () => {
                 try {
                     let n = 0
                     await client.user.setAvatar(document.getElementById("avatar").value).catch(error => {
-                        alert(error)
+                        dialog.showErrorBox('error', rror)
                         client.destroy()
                         n = 1
                     });
                     if (n == 0) {
-                        alert('Successfully changed.')
-                        await localStorage.setItem('bavatar', client.user.avatarURL())
+                        dialog.showErrorBox('error', 'Successfully changed.')
+                        await localStorage.setItem('bavatar', client.user.tag)
                         client.destroy()
                     }
                 } catch (error) {
-                    alert(error).then(a => {
+                    dialog.showErrorBox('error', error).then(a => {
                         client.destroy()
                     })
                 }
             })
-            client.login(localStorage.token).catch(error => alert(error));
+            client.login(localStorage.token).catch(error => dialog.showErrorBox('error', error));
         }
     </script>
 

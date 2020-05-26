@@ -46,7 +46,7 @@
 
         client.on('ready', () => {
             if (!client.user.bot) {
-                alert("Login failed..", "Self-bot is not allowed\nPlease Check Discord Tos")
+                dialog.showErrorBox("Login failed..", "Self-bot is not allowed\nPlease Check Discord Tos")
                 location.href = 'index.html'
                 require('electron').shell.openExternal(`https://support.discord.com/hc/en-us/articles/115002192352-Automated-user-accounts-self-bots-`)
             }
@@ -94,8 +94,10 @@
                 console.log(4)
                 if (commandlist[command]) {
                     try {
-                        console.log(5)
-                        message.reply(commandlist[command])
+                        let print1 = commandlist[command]
+                        let print2 = print1.replace('{user}',message.author).replace('{usertag}',message.author.tag).replace('{avatar}',message.author.avatarURL()).replace('{servername}',message.guild.name).replace('{serverimage}',message.guild.icon)
+                        message.reply(print2)
+                        console.log(print2)
                     } catch (e) {
                         message.reply(`Error : ${e}`)
                     }
@@ -103,37 +105,43 @@
             }
         });
         client.login(localStorage.token).catch(e => {
-            alert("Login failed..", "Token missing or invalid.")
+            dialog.showErrorBox("Login failed..", "Token missing or invalid.")
             location.href = 'index.html'
             console.log(e);
         })
         function commands() {
             ipcRenderer.send('CommandsForm', () => {
-                console.log("Event sent.");
+                console.log("Commands");
             });
         }
         function events() {
             ipcRenderer.send('EventsForm', () => {
-                console.log("Event sent.");
+                console.log("Event");
             });
         }
         function botinfo() {
             ipcRenderer.send('BotinfoForm', () => {
-                console.log("Event sent.");
+                console.log("Bot Info");
             });
         }
         function invite() {
+            console.log('Invite')
             require('electron').shell.openExternal(`https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot`)
         }
         function guilds() {
             ipcRenderer.send('GuildsForm', () => {
-                console.log("Event sent.");
+                console.log("Guild");
             });
         }
         function database() {
             ipcRenderer.send('DatabaseForm', () => {
-                console.log("Event sent.");
+                console.log("Database");
             });
+        }
+        function logout() {
+            ipcRenderer.send('logout', () => {
+                console.log('Logout')
+            })
         }
     </script>
     <section style="text-align: center;">
@@ -186,7 +194,7 @@
     </section>
     <div class="footer">
         <section style="text-align: center;">
-            <button class="ui right labeled icon button" onClick="location.href = 'index.html'">
+            <button class="ui right labeled icon button" onclick="logout()">
                 <i class="right arrow icon"></i>
                 Logout
             </button>

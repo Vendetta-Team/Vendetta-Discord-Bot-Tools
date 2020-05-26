@@ -63,6 +63,8 @@ function createWindow() {
       win2.on('closed', () => {
         win2 = null
       })
+    } else {
+      win2.focus()
     }
   });
 
@@ -86,11 +88,29 @@ function createWindow() {
 
         win3 = null
       })
+    } else {
+      win3.focus()
     }
   });
-  ipcMain.on('invite', (event, path) => {
-    require('electron').shell.openExternal('https://discord.gg/5VAHckw')
-  });
+  ipcMain.on('logout', () => {
+    if (win2) {
+      win2.close()
+    }
+    if (win3) {
+      win3.close()
+    }
+    if (win4) {
+      win4.close()
+    }
+    if (win5) {
+      win5.close()
+    }
+    if (win6) {
+      win6.close()
+    }
+    const paths = path.join
+    win.loadURL(paths(__dirname, './view/index.html'))
+  })
   ipcMain.on('BotinfoForm', (event, path) => {
     if (!win4) {
       win4 = new BrowserWindow({
@@ -112,6 +132,8 @@ function createWindow() {
 
         win4 = null
       })
+    } else {
+      win4.focus()
     }
   });
 
@@ -136,6 +158,8 @@ function createWindow() {
 
         win5 = null
       })
+    } else {
+      win5.focus()
     }
   });
 
@@ -159,6 +183,8 @@ function createWindow() {
 
         win6 = null
       })
+    } else {
+      win6.focus()
     }
   });
 }
@@ -172,6 +198,7 @@ app.on('ready', () => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    console.clear()
     app.quit()
   }
 })

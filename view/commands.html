@@ -36,6 +36,12 @@
     <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
     <script src="../semantic/dist/semantic.min.js"></script>
     <section>
+        <button class="ui right labeled icon button" onClick="help()">
+            <i class="right arrow icon"></i>
+            help
+        </button>
+    </section>
+    <section>
         <div class="ui input">
             <input id="command" type="text" placeholder="Command">
             <input id="reply" type="text" placeholder="Reply">
@@ -56,6 +62,7 @@
     </div>
 </body>
 <script type="text/javascript">
+    const { dialog } = require('electron').remote
     let cmds = ""
     setTimeout(async () => {
         try {
@@ -72,9 +79,20 @@
             console.log(e)
         }
     }, 1);
+    function help() {
+        const help = {
+            type: 'none',
+            buttons: ['Okay'],
+            defaultId: 2,
+            title: 'Help',
+            message: 'Vendetta Discord Bot Tools',
+            detail: '{user} : author mention\n{usertag} : author tag\n{avatar} : author avatarURL\n{servername} : server name\n{serverimage} : server image'
+        };
+        dialog.showMessageBox(help);
+    }
     async function commandd() {
         if (!document.getElementById('command').value) {
-            alert('You must fill command text box');
+            dialog.showErrorBox('error', 'You must fill command text box');
             document.getElementById('command').disabled = false;
             document.getElementById('reply').disabled = false;
             document.getElementById('command').readonly = false;
@@ -84,7 +102,7 @@
             return
         }
         if (!document.getElementById('reply').value) {
-            alert('You must fill reply text box');
+            dialog.showErrorBox('error', 'You must fill reply text box');
             document.getElementById('command').disabled = false;
             document.getElementById('reply').disabled = false;
             document.getElementById('command').readonly = false;
@@ -98,7 +116,7 @@
             console.log(1)
             command[document.getElementById('command').value] = document.getElementById('reply').value
             localStorage.setItem('commands', JSON.stringify(command));
-            document.getElementById('bbcommands').innerHTML = `<section id=${document.getElementById('command').value}><div class="ui divider"></div><h1 class="ui header">${document.getElementById('command').value}<div class="sub header">${document.getElementById('reply').value}</div></h1><button class='ui right labeled icon button' onClick="const dele = JSON.parse(localStorage.getItem('commands'));delete dele.${document.getElementById('command').value}; localStorage.setItem('commands',JSON.stringify(dele));document.getElementById('${document.getElementById('command').value}').remove();"><i class='right arrow icon'></i>Delete Command</button><div class="ui divider"></div><br></section>`
+            document.getElementById('bbcommands').innerHTML = `<section id=${document.getElementById('command').value}><div class="ui divider"></div><h1 class="ui header">${document.getElementById('command').value}<div class="sub header">${document.getElementById('reply').value}</div></h1><button class='ui right labeled icon button' onClick="const dele = JSON.parse(localStorage.getItem('commands'));delete dele[\'${document.getElementById('command').value}\']; localStorage.setItem('commands',JSON.stringify(dele));document.getElementById('${document.getElementById('command').value}').remove();"><i class='right arrow icon'></i>Delete Command</button><div class="ui divider"></div><br></section>`
             document.getElementById('command').disabled = false;
             document.getElementById('reply').disabled = false;
             document.getElementById('command').readonly = false;
@@ -109,7 +127,7 @@
             console.log(2)
             commands = JSON.parse(localStorage.getItem('commands'))
             if (commands[document.getElementById('command').value]) {
-                await alert('The command is already defined.');
+                await dialog.showErrorBox('error', 'The command is already defined.');
                 document.getElementById('command').disabled = false;
                 document.getElementById('reply').disabled = false;
                 document.getElementById('command').readonly = false;
@@ -123,7 +141,7 @@
                 console.log(document.getElementById('command').value)
                 console.log(command)
                 localStorage.setItem('commands', JSON.stringify(command));
-                document.getElementById('bbcommands').innerHTML += `<section id=${document.getElementById('command').value}><div class="ui divider"></div><h1 class="ui header">${document.getElementById('command').value}<div class="sub header">${document.getElementById('reply').value}</div></h1><button class='ui right labeled icon button' onClick="const dele = JSON.parse(localStorage.getItem('commands'));delete dele.${document.getElementById('command').value}; localStorage.setItem('commands',JSON.stringify(dele));document.getElementById('${document.getElementById('command').value}').remove();"><i class='right arrow icon'></i>Delete Command</button><div class="ui divider"></div><br></section>`
+                document.getElementById('bbcommands').innerHTML += `<section id=${document.getElementById('command').value}><div class="ui divider"></div><h1 class="ui header">${document.getElementById('command').value}<div class="sub header">${document.getElementById('reply').value}</div></h1><button class='ui right labeled icon button' onClick="const dele = JSON.parse(localStorage.getItem('commands'));delete dele[\'${document.getElementById('command').value}\']; localStorage.setItem('commands',JSON.stringify(dele));document.getElementById('${document.getElementById('command').value}').remove();"><i class='right arrow icon'></i>Delete Command</button><div class="ui divider"></div><br></section>`
                 document.getElementById('command').disabled = false;
                 document.getElementById('reply').disabled = false;
                 document.getElementById('command').readonly = false;
