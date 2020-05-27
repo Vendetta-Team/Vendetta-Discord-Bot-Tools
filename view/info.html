@@ -12,7 +12,6 @@
         async function ready() {
             const os = require('os')
             const utill = require('os-utils')
-            console.log(os)
             const pcname = os.hostname()
             const username = os.userInfo().username
             const bit = os.arch()
@@ -72,7 +71,11 @@
                     let uptime = `${d}:${h}:${m}:${s}`
                     document.getElementById('uptime').innerText = `${uptime}`
                     document.getElementById('mem').innerText = `${Math.floor((os.totalmem() - os.freemem()) / os.totalmem() * 100)}%`
-                    document.getElementById('cpusage').innerText = `${infos}`
+                    try {
+                        document.getElementById('cpusage').innerText = `${infos}`
+                    } catch (e) {
+
+                    }
                     netinfo = ""
                     for (const nets in networkInterfaces) {
                         netinfo += `<h3>${nets}</h3><hr><h5>주소 : ${networkInterfaces[nets][1].address}<br>넷마스트 : ${networkInterfaces[nets][1].netmask}<br>맥주소 : ${networkInterfaces[nets][1].mac}<br></h5>`
@@ -85,11 +88,6 @@
             document.getElementById('pcname').innerText = `${pcname}`
             document.getElementById('username').innerText = `${username}`
             document.getElementById('bit').innerText = `${bit}`
-            if (wifi) {
-                document.getElementById('wifi').innerText = `주소 : ${wifi.address}\n넷마스트 : ${wifi.netmask}\n맥주소 : ${wifi.mac}`
-            } else {
-                document.getElementById('wifi').innerText = `없음`
-            }
         }
     </script>
     <section class="pcname">
@@ -164,12 +162,12 @@
         </h1>
     </section>
     <hr>
-    <section class="wifi">
+    <section class="netinfo">
         <h1 class="ui header">
             <i class="wifi icon"></i>
             <div class="content">
-                Wi-Fi
-                <div class="sub header" id="wifi">
+                Net Info
+                <div class="sub header" id="netinfo">
 
                 </div>
             </div>
