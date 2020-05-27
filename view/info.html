@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Info</title>
+    <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+    <script src="../semantic/dist/semantic.min.js"></script>
+</head>
+
+<body onload='ready()'>
+    <script>
+        async function ready() {
+            const os = require('os')
+            const utill = require('os-utils')
+            console.log(os)
+            const pcname = os.hostname()
+            const username = os.userInfo().username
+            const bit = os.arch()
+            const cpu = os.cpus()[0].model
+            let infos = ""
+            let netinfo = ""
+            const loop = setInterval(() => {
+                let networkInterfaces = os.networkInterfaces()
+                let nou = require('node-os-utils')
+                let cpusage = nou.cpu
+                cpusage.usage()
+                    .then(info => {
+                        infos = `${info}%`
+                    })
+                let day = 0
+                let hours = 0
+                let min = 0
+                let sec = os.uptime()
+                async function get() {
+                    function getday() {
+                        while (sec >= 86400) {
+                            day++
+                            sec = sec - 86400
+                        }
+                    }
+                    function gethours() {
+                        while (sec >= 3600) {
+                            hours++
+                            sec = sec - 3600
+                        }
+                    }
+                    function getmin() {
+                        while (sec >= 60) {
+                            min++
+                            sec = sec - 60
+                        }
+                    }
+                    await getday()
+                    await gethours()
+                    await getmin()
+                    let d = day.toString()
+                    let h = hours.toString()
+                    let m = min.toString()
+                    let s = sec.toString()
+                    if (d.length == 1) {
+                        d = "0" + d
+                    }
+                    if (h.length == 1) {
+                        h = "0" + h
+                    }
+                    if (m.length == 1) {
+                        m = "0" + m
+                    }
+                    if (s.length == 1) {
+                        s = "0" + s
+                    }
+                    let uptime = `${d}:${h}:${m}:${s}`
+                    document.getElementById('uptime').innerText = `${uptime}`
+                    document.getElementById('mem').innerText = `${Math.floor((os.totalmem() - os.freemem()) / os.totalmem() * 100)}%`
+                    document.getElementById('cpusage').innerText = `${infos}`
+                    netinfo = ""
+                    for (const nets in networkInterfaces) {
+                        netinfo += `<h3>${nets}</h3><hr><h5>주소 : ${networkInterfaces[nets][1].address}<br>넷마스트 : ${networkInterfaces[nets][1].netmask}<br>맥주소 : ${networkInterfaces[nets][1].mac}<br></h5>`
+                    }
+                    document.getElementById('netinfo').innerHTML = `${netinfo}`
+                }
+                get()
+            }, 1);
+            document.getElementById('cpu').innerText = `${cpu}`
+            document.getElementById('pcname').innerText = `${pcname}`
+            document.getElementById('username').innerText = `${username}`
+            document.getElementById('bit').innerText = `${bit}`
+            if (wifi) {
+                document.getElementById('wifi').innerText = `주소 : ${wifi.address}\n넷마스트 : ${wifi.netmask}\n맥주소 : ${wifi.mac}`
+            } else {
+                document.getElementById('wifi').innerText = `없음`
+            }
+        }
+    </script>
+    <section class="pcname">
+        <h1 class="ui header">
+            <i class="desktop icon"></i>
+            <div class="content">
+                PC Name
+                <div class="sub header" id="pcname">
+
+                </div>
+            </div>
+        </h1>
+    </section>
+    <hr>
+    <section class='username'>
+        <h1 class="ui header">
+            <i class="address card icon"></i>
+            <div class="content">
+                PC Username
+                <div class="sub header" id="username">
+
+                </div>
+            </div>
+        </h1>
+    </section>
+    <hr>
+    <section class="cpu">
+        <h1 class="ui header">
+            <i class="cogs icon"></i>
+            <div class="content">
+                CPU
+                <div class="sub header" id="cpu">
+
+                </div>
+            </div>
+        </h1>
+    </section>
+    <hr>
+    <section class="cpuusage">
+        <h1 class="ui header">
+            <i class="cogs icon"></i>
+            <div class="content">
+                CPU usage
+                <div class="sub header" id="cpuusage">
+
+                </div>
+            </div>
+        </h1>
+    </section>
+    <hr>
+    <section class="mem">
+        <h1 class="ui header">
+            <i class="microchip icon"></i>
+            <div class="content">
+                Memory Usage
+                <div class="sub header" id="mem">
+
+                </div>
+            </div>
+        </h1>
+    </section>
+    <hr>
+    <section class="bit">
+        <h1 class="ui header">
+            <i class="hdd icon"></i>
+            <div class="content">
+                Bit
+                <div class="sub header" id="bit">
+
+                </div>
+            </div>
+        </h1>
+    </section>
+    <hr>
+    <section class="wifi">
+        <h1 class="ui header">
+            <i class="wifi icon"></i>
+            <div class="content">
+                Wi-Fi
+                <div class="sub header" id="wifi">
+
+                </div>
+            </div>
+        </h1>
+    </section>
+    <hr>
+    <section class="uptime">
+        <h1 class="ui header">
+            <i class="stopwatch icon"></i>
+            <div class="content">
+                Uptime
+                <div class="sub header" id="uptime">
+
+                </div>
+            </div>
+        </h1>
+    </section>
+</body>
+
+</html>
