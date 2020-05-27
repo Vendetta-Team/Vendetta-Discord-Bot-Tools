@@ -35,8 +35,9 @@
         }
     </style>
 
-    <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
-    <script src="../semantic/dist/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.4/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.4/semantic.min.js"></script>
     <script type="text/javascript" src="../discord.min.js"></script>
     <script type="text/javascript">
         const { ipcRenderer, BrowserWindow } = require('electron')
@@ -95,7 +96,7 @@
                 if (commandlist[command]) {
                     try {
                         let print1 = commandlist[command]
-                        let print2 = print1.replace('{user}',message.author).replace('{usertag}',message.author.tag).replace('{avatar}',message.author.avatarURL()).replace('{servername}',message.guild.name).replace('{serverimage}',message.guild.icon)
+                        let print2 = print1.replace('{user}', message.author).replace('{usertag}', message.author.tag).replace('{avatar}', message.author.avatarURL()).replace('{servername}', message.guild.name).replace('{serverimage}', message.guild.icon)
                         message.reply(print2)
                         console.log(print2)
                     } catch (e) {
@@ -127,6 +128,11 @@
         function invite() {
             console.log('Invite')
             require('electron').shell.openExternal(`https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot`)
+        }
+        function info() {
+            ipcRenderer.send('Info', () => {
+                console.log('Info')
+            });
         }
         function guilds() {
             ipcRenderer.send('GuildsForm', () => {
@@ -190,6 +196,7 @@
             <button class="ui button" onclick="invite()">Invite Link</button>
             <button class="ui button" onclick="guilds()">Guilds Info</button>
             <button class="ui button" onclick="database()">DataBase Info</button>
+            <button class="ui button" onclick="info()">Pc Info</button>
         </div>
     </section>
     <div class="footer">
