@@ -96,7 +96,6 @@ function createWindow() {
     app.quit()
     win = null
   })
-  win.webContents.openDevTools()
   ipcMain.on('CommandsForm', (event, path) => {
     if (!win2) {
       win2 = new BrowserWindow({
@@ -108,7 +107,6 @@ function createWindow() {
           nodeIntegrationInWorker: true
         }
       })
-      win2.webContents.openDevTools()
       win2.loadURL(url.format({
         pathname: paths(__dirname, './view/commands.html'),
         protocol: 'file:',
@@ -181,7 +179,6 @@ function createWindow() {
         protocol: 'file:',
         slashes: false
       }))
-      win4.webContents.openDevTools()
       win4.on('closed', () => {
 
         win4 = null
@@ -202,7 +199,6 @@ function createWindow() {
           nodeIntegrationInWorker: true
         }
       })
-      win5.webContents.openDevTools()
       win5.loadURL(url.format({
         pathname: paths(__dirname, './view/guilds.html'),
         protocol: 'file:',
