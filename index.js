@@ -8,6 +8,7 @@ let win3
 let win4
 let win5
 let win6
+let win7
 
 if (handleSquirrelEvent(app)) {
   return;
@@ -96,6 +97,7 @@ function createWindow() {
     app.quit()
     win = null
   })
+  // win.webContents.openDevTools()
   ipcMain.on('CommandsForm', (event, path) => {
     if (!win2) {
       win2 = new BrowserWindow({
@@ -107,6 +109,7 @@ function createWindow() {
           nodeIntegrationInWorker: true
         }
       })
+      // win2.webContents.openDevTools()
       win2.loadURL(url.format({
         pathname: paths(__dirname, './view/commands.html'),
         protocol: 'file:',
@@ -179,6 +182,7 @@ function createWindow() {
         protocol: 'file:',
         slashes: false
       }))
+      // win4.webContents.openDevTools()
       win4.on('closed', () => {
 
         win4 = null
@@ -199,6 +203,7 @@ function createWindow() {
           nodeIntegrationInWorker: true
         }
       })
+      // win5.webContents.openDevTools()
       win5.loadURL(url.format({
         pathname: paths(__dirname, './view/guilds.html'),
         protocol: 'file:',
@@ -235,6 +240,31 @@ function createWindow() {
       })
     } else {
       win6.focus()
+    }
+  });
+
+  ipcMain.on('Info', (event, path) => {
+    if (!win7) {
+      win7 = new BrowserWindow({
+        width: 800,
+        height: 600,
+        icon: ico,
+        webPreferences: {
+          nodeIntegration: true,
+          nodeIntegrationInWorker: true
+        }
+      })
+      win7.loadURL(url.format({
+        pathname: paths(__dirname, './view/info.html'),
+        protocol: 'file:',
+        slashes: false
+      }))
+      win7.on('closed', () => {
+        win7 = null
+      })
+      // win7.webContents.openDevTools()
+    } else {
+      win7.focus()
     }
   });
 }
