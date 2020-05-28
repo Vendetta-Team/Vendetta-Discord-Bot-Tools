@@ -9,6 +9,7 @@ electron-squirrel-startup : "1.0.0",
 ffmpeg-static : "4.2.0",  
 fomantic-ui : "^2.8.5-beta.64",  
 fs : "0.0.1-security",  
+node-os-utils : ^1.2.2
 yt-search : "1.1.2",  
 ytdl-core : "2.1.1"
 Maker
