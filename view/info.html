@@ -52,7 +52,7 @@
                 let cpusage = nou.cpu
                 cpusage.usage()
                     .then(info => {
-                        infos = `${info}%`
+                        infos = `${Math.floor(info)}%`
                     })
                 let day = 0
                 let hours = 0
@@ -100,10 +100,11 @@
                     document.getElementById('uptime').innerText = `${uptime}`
                     document.getElementById('mem').innerText = `${Math.floor((os.totalmem() - os.freemem()) / os.totalmem() * 100)}%`
                     try {
-                        document.getElementById('cpusage').innerText = `${infos}`
+                        document.getElementById('cpuusage').innerText = infos
                     } catch (e) {
 
                     }
+                    console.log(infos)
                     netinfo = ""
                     for (const nets in networkInterfaces) {
                         netinfo += `<h3>${nets}</h3><hr><h5>주소 : ${networkInterfaces[nets][1].address}<br>넷마스트 : ${networkInterfaces[nets][1].netmask}<br>맥주소 : ${networkInterfaces[nets][1].mac}<br></h5>`
